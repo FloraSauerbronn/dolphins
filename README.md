@@ -22,6 +22,13 @@ Consultancy for Flora's 🌺 master thesis.
     uv pip install -e .[dev]
     ```
 
+## Usage
+
+* Run the main script with:
+```bash
+python -m dolphins
+```
+
 ## Compile dependencies
 
 ### Main dependencies only
@@ -42,10 +49,14 @@ uv pip compile pyproject.toml -o requirements_dev.txt --extra dev
 pytest
 ```
 
-## Run linter
+## Linter & formatter
 
 * Make sure to have the development dependencies installed.
 * Run linter with:
 ```bash
-black src/ tests/
+ruff check src/ tests/
+```
+* Run formatter with:
+```bash
+ruff format src/ tests/
 ```
