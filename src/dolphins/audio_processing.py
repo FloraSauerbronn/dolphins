@@ -1,6 +1,6 @@
 import numpy as np
-from scipy.io import wavfile
 from pathlib import Path
+from scipy.io import wavfile
 
 
 def read_wav_file(audio_path: str) -> dict:
