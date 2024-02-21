@@ -1,12 +1,14 @@
-from .audio_processing import generate_chunks_for_audios_folder
+from .audio_processing import create_audio_dataset
 
 
 def main():
-    generate_chunks_for_audios_folder(
+    create_audio_dataset(
         audios_folder_name="audios",
         chunks_folder_name="chunks",
         window_seconds=1,
         step_seconds=0.25,
+        sampling_rate=None,
+        mono_channel=False,
     )
 
 

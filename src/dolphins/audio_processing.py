@@ -1,9 +1,12 @@
-import numpy as np
 from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import numpy as np
+from datasets import Audio, Dataset
 from scipy.io import wavfile
 
 
-def read_wav_file(audio_path: str) -> dict:
+def read_wav_file(audio_path: str) -> Dict[str, Any]:
     sample_rate, data = wavfile.read(audio_path)
     num_samples, num_channels = data.shape
     length_seconds = num_samples / sample_rate
@@ -39,14 +42,16 @@ def chunk_matrix_on_axis_0(data, window_size: int, step_size: int) -> np.ndarray
 
 
 def chunk_audio_data(
-    audio: dict, window_seconds: float, step_seconds: float
+    audio: Dict[str, Any], window_seconds: float, step_seconds: float
 ) -> np.ndarray:
     window_size = int(window_seconds * audio["sample_rate"])
     step_size = int(step_seconds * audio["sample_rate"])
     return chunk_matrix_on_axis_0(audio["data"], window_size, step_size)
 
 
-def round_audio(audio: dict, window_seconds: float, step_seconds: float) -> dict:
+def round_audio(
+    audio: Dict[str, Any], window_seconds: float, step_seconds: float
+) -> Dict[str, Any]:
     window_size = int(window_seconds * audio["sample_rate"])
     step_size = int(step_seconds * audio["sample_rate"])
     num_elements_outside_first_chunk = audio["num_samples"] - window_size
@@ -68,11 +73,12 @@ def generate_chunks_for_audios_folder(
     chunks_folder_name: str,
     window_seconds: float,
     step_seconds: float,
-):
+) -> List[Dict[str, Any]]:
     audios_folder = Path(audios_folder_name)
     chunks_folder = audios_folder / chunks_folder_name
     chunks_folder.mkdir(parents=True, exist_ok=True)
 
+    metadata = []
     for audio_file in audios_folder.glob("*.wav"):
         audio = read_wav_file(audio_file)
         rounded_audio = round_audio(audio, window_seconds, step_seconds)
@@ -83,9 +89,40 @@ def generate_chunks_for_audios_folder(
         )
         for index, audio_chunk in enumerate(chunked_audio_data):
             chunk_file = chunks_folder / f"{audio_file.stem}_chunk_{index}.wav"
+            chunk_metadata = {
+                "original_file": audio_file.name,
+                "original_file_length_seconds": audio["length_seconds"],
+                "original_file_sample_rate": audio["sample_rate"],
+                "chunk_index": index,
+                "chunk_start_seconds": index * step_seconds,
+                "chunk_end_seconds": (index * step_seconds) + window_seconds,
+                "chunk_file_name": chunk_file.resolve().__str__(),
+            }
             print(f"Saving {chunk_file}")
             wavfile.write(
                 filename=chunk_file,
                 rate=audio["sample_rate"],
                 data=audio_chunk,
             )
+            metadata.append(chunk_metadata)
+
+    return metadata
+
+
+def create_audio_dataset(
+    audios_folder_name: str,
+    chunks_folder_name: str,
+    window_seconds: float,
+    step_seconds: float,
+    sampling_rate: Optional[int],
+    mono_channel: bool,
+) -> Dataset:
+    metadata: List[Dict[str, Any]] = generate_chunks_for_audios_folder(
+        audios_folder_name, chunks_folder_name, window_seconds, step_seconds
+    )
+    audio_dataset: Dataset = (
+        Dataset.from_list(metadata)
+        .rename_column("chunk_file_name", "audio")
+        .cast_column("audio", Audio(sampling_rate=sampling_rate, mono=mono_channel))
+    )
+    return audio_dataset
