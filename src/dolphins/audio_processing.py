@@ -87,8 +87,10 @@ def generate_chunks_for_audios_folder(
             window_seconds=window_seconds,
             step_seconds=step_seconds,
         )
+        audio_chunk_folder = chunks_folder / audio_file.stem
+        audio_chunk_folder.mkdir(parents=True, exist_ok=True)
         for index, audio_chunk in enumerate(chunked_audio_data):
-            chunk_file = chunks_folder / f"{audio_file.stem}_chunk_{index}.wav"
+            chunk_file = audio_chunk_folder / f"chunk_{index}.wav"
             chunk_metadata = {
                 "audio_filename": audio_file.name,
                 "original_file_length_seconds": audio["length_seconds"],
