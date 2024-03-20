@@ -19,6 +19,8 @@ keywords = ["dolphins", "audio", "detection"]
 dependencies = [
     "scipy >= 1.12.0, < 2",
     "datasets[audio] >= 2.17.1, < 3",
+    "pandas >= 2.2.1, < 3",
+    "duckdb >= 0.10.1, < 1",
 ]
 requires-python = ">=3.11"
 

@@ -6,6 +6,8 @@ aiohttp==3.9.3
     #   fsspec
 aiosignal==1.3.1
     # via aiohttp
+async-timeout==4.0.3
+    # via aiohttp
 attrs==23.2.0
     # via aiohttp
 audioread==3.0.1
@@ -23,6 +25,7 @@ dill==0.3.8
     # via
     #   datasets
     #   multiprocess
+duckdb==0.10.1
 filelock==3.13.1
     # via
     #   datasets
@@ -76,7 +79,7 @@ packaging==23.2
     #   datasets
     #   huggingface-hub
     #   pooch
-pandas==2.2.0
+pandas==2.2.1
     # via datasets
 platformdirs==4.2.0
     # via pooch
