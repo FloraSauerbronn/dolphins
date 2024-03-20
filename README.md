@@ -13,6 +13,7 @@ Consultancy for Flora's 🌺 master thesis.
     source .venv/bin/activate
     ```
 * Install the project itself:
+
     For minimal dependencies:
     ```bash
     uv pip install -e .
