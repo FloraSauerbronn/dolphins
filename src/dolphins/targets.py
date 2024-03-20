@@ -1,12 +1,14 @@
 from pathlib import Path
+from typing import List
 
+import duckdb
 import pandas as pd
 
 
 def build_labels_df(labels_folder_name: str) -> pd.DataFrame:
     labels_folder = Path(labels_folder_name)
 
-    dfs_for_concatenation = []
+    dfs_for_concatenation: List[pd.DataFrame] = []
     for labels_file in labels_folder.glob("*.txt"):
         df: pd.DataFrame = pd.read_csv(labels_file, sep="\t")
         df.columns = df.columns.str.capitalize()
@@ -40,3 +42,13 @@ def build_labels_df(labels_folder_name: str) -> pd.DataFrame:
         dfs_for_concatenation.append(df_to_append)
     labels_df: pd.DataFrame = pd.concat(dfs_for_concatenation, ignore_index=True)
     return labels_df
+
+
+def join_target(
+    audio_metadata_df: pd.DataFrame,
+    labels_df: pd.DataFrame,
+) -> pd.DataFrame:
+    sql_path: Path = Path(".") / "src" / "dolphins" / "sql" / "merge_target.sql"
+    with open(sql_path, "r") as f:
+        df: pd.DataFrame = duckdb.sql(f.read()).to_df()
+    return df

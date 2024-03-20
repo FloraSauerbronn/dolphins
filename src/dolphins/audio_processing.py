@@ -1,8 +1,8 @@
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 import numpy as np
-from datasets import Audio, Dataset
+import pandas as pd
 from scipy.io import wavfile
 
 
@@ -73,12 +73,12 @@ def generate_chunks_for_audios_folder(
     chunks_folder_name: str,
     window_seconds: float,
     step_seconds: float,
-) -> List[Dict[str, Any]]:
+) -> pd.DataFrame:
     audios_folder = Path(audios_folder_name)
     chunks_folder = audios_folder / chunks_folder_name
     chunks_folder.mkdir(parents=True, exist_ok=True)
 
-    metadata = []
+    metadata: List[Dict[str, Any]] = []
     for audio_file in audios_folder.glob("*.wav"):
         audio = read_wav_file(audio_file)
         rounded_audio = round_audio(audio, window_seconds, step_seconds)
@@ -90,7 +90,7 @@ def generate_chunks_for_audios_folder(
         for index, audio_chunk in enumerate(chunked_audio_data):
             chunk_file = chunks_folder / f"{audio_file.stem}_chunk_{index}.wav"
             chunk_metadata = {
-                "original_file": audio_file.name,
+                "audio_filename": audio_file.name,
                 "original_file_length_seconds": audio["length_seconds"],
                 "original_file_sample_rate": audio["sample_rate"],
                 "chunk_index": index,
@@ -106,23 +106,4 @@ def generate_chunks_for_audios_folder(
             )
             metadata.append(chunk_metadata)
 
-    return metadata
-
-
-def create_audio_dataset(
-    audios_folder_name: str,
-    chunks_folder_name: str,
-    window_seconds: float,
-    step_seconds: float,
-    sampling_rate: Optional[int],
-    mono_channel: bool,
-) -> Dataset:
-    metadata: List[Dict[str, Any]] = generate_chunks_for_audios_folder(
-        audios_folder_name, chunks_folder_name, window_seconds, step_seconds
-    )
-    audio_dataset: Dataset = (
-        Dataset.from_list(metadata)
-        .rename_column("chunk_file_name", "audio")
-        .cast_column("audio", Audio(sampling_rate=sampling_rate, mono=mono_channel))
-    )
-    return audio_dataset
+    return pd.DataFrame(metadata)
