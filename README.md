@@ -25,7 +25,11 @@ Consultancy for Flora's 🌺 master thesis.
 
 ## Usage
 
-* Run the main script with:
+### Placing data files
+* Audio files should be placed in the `audios` directory.
+* Annotation CSVs should be placed in the `labels` directory. Obs.: each CSV should have a prefix equal to the name of the corresponding audio file plus a suffix separated by a dot (`.`).
+
+### Run the main script with
 ```bash
 python -m dolphins
 ```
