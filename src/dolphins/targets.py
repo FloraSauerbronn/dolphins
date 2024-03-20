@@ -1,0 +1,42 @@
+from pathlib import Path
+
+import pandas as pd
+
+
+def build_labels_df(labels_folder_name: str) -> pd.DataFrame:
+    labels_folder = Path(labels_folder_name)
+
+    dfs_for_concatenation = []
+    for labels_file in labels_folder.glob("*.txt"):
+        df: pd.DataFrame = pd.read_csv(labels_file, sep="\t")
+        df.columns = df.columns.str.capitalize()
+        df_to_append = (
+            df.rename(
+                columns={
+                    "Channel": "call_channel",
+                    "Type": "label",
+                    "Begin time (s)": "call_begin_time",
+                    "End time (s)": "call_end_time",
+                }
+            )
+            .assign(
+                audio_filename=labels_file.name.split(".")[0] + ".wav",
+                call_length_seconds=lambda x: x.call_end_time - x.call_begin_time,
+                label=lambda x: x.label.str.capitalize().replace(
+                    {"^W.*": "whistle", "^C.*": "click"}, regex=True
+                ),
+            )
+            .dropna(subset=["label"])[
+                [
+                    "audio_filename",
+                    "call_channel",
+                    "label",
+                    "call_begin_time",
+                    "call_end_time",
+                    "call_length_seconds",
+                ]
+            ]
+        )
+        dfs_for_concatenation.append(df_to_append)
+    labels_df: pd.DataFrame = pd.concat(dfs_for_concatenation, ignore_index=True)
+    return labels_df
