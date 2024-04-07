@@ -39,7 +39,7 @@ def main():
         sampling_rate=None,
         mono_channel=False,
         labels_folder_name="labels",
-        join_stategy_name="chunk_contains_entire_call"
+        join_stategy_name="chunk_contains_entire_call",
     )
 
 
