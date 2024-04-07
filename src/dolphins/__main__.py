@@ -15,12 +15,13 @@ def create_dataset(
     sampling_rate: Optional[int],
     mono_channel: bool,
     labels_folder_name: str,
+    join_stategy_name: str,
 ) -> Dataset:
     labels_df: pd.DataFrame = build_labels_df(labels_folder_name)
     audio_metadata_df: pd.DataFrame = generate_chunks_for_audios_folder(
         audios_folder_name, chunks_folder_name, window_seconds, step_seconds
     )
-    df: pd.DataFrame = join_target(audio_metadata_df, labels_df)
+    df: pd.DataFrame = join_target(audio_metadata_df, labels_df, join_stategy_name)
     audio_dataset: Dataset = (
         Dataset.from_pandas(df, preserve_index=False)
         .rename_column("chunk_file_name", "audio")
@@ -38,6 +39,7 @@ def main():
         sampling_rate=None,
         mono_channel=False,
         labels_folder_name="labels",
+        join_stategy_name="chunk_contains_entire_call"
     )
 
 

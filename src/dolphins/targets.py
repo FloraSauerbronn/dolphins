@@ -47,8 +47,10 @@ def build_labels_df(labels_folder_name: str) -> pd.DataFrame:
 def join_target(
     audio_metadata_df: pd.DataFrame,
     labels_df: pd.DataFrame,
+    join_stategy_name: str,
 ) -> pd.DataFrame:
-    sql_path: Path = Path(".") / "src" / "dolphins" / "sql" / "merge_target.sql"
-    with open(sql_path, "r") as f:
-        df: pd.DataFrame = duckdb.sql(f.read()).to_df()
+    sql_path: Path = Path(".") / "src" / "dolphins" / "sql" / f"{join_stategy_name}.sql"
+    with open(sql_path, "r") as file:
+        sql_query: str = file.read()
+        df: pd.DataFrame = duckdb.sql(sql_query).to_df()
     return df
