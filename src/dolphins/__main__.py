@@ -34,12 +34,12 @@ def main():
     create_dataset(
         audios_folder_name="audios",
         chunks_folder_name="chunks",
-        window_seconds=8,
+        window_seconds=2,
         step_seconds=0.25,
         sampling_rate=None,
         mono_channel=False,
         labels_folder_name="labels",
-        join_stategy_name="chunk_contains_entire_call",
+        join_stategy_name="chunk_contains_percentage_call",
     )
 
 
