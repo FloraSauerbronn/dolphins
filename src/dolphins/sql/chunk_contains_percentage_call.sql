@@ -1,19 +1,22 @@
 -- Table of valid chunks with dolphin calls
 SELECT
     am.*,
-    FIRST(l.labels_df ORDER BY l.call_begin_time) AS label,
-    FIRST(l.call_begin_time ORDER BY l.call_begin_time) AS call_begin_time,
-    FIRST(l.call_end_time ORDER BY l.call_begin_time) AS call_end_time,
-    FIRST(l.call_length_seconds ORDER BY l.call_begin_time) AS call_length_seconds,
-    FIRST(l.call_channel ORDER BY l.call_begin_time) AS call_channel,
-    FIRST(
-        CASE WHEN (l.call_begin_time < am.chunk_end_seconds AND
-            am.chunk_end_seconds < l.call_end_time) THEN (am.chunk_end_seconds - GREATEST(l.call_begin_time, am.chunk_start_seconds))
-        CASE WHEN (l.call_begin_time < am.chunk_start_seconds AND
-            am.chunk_start_seconds < l.call_end_time) THEN (LEAST(l.call_end_time, am.chunk_end_seconds) -am.chunk_start_seconds)
-        ELSE l.call_length_seconds
-        ORDER BY l.call_begin_time) AS call_lenght_within_chunk,
-    COUNT(*) AS label_count_within_chunk
+    l.label AS label,
+    l.call_begin_time AS call_begin_time,
+    l.call_end_time AS call_end_time,
+    l.call_length_seconds AS call_length_seconds,
+    l.call_channel AS call_channel,
+    CASE
+        WHEN (
+            l.call_begin_time < am.chunk_end_seconds AND
+            am.chunk_end_seconds < l.call_end_time
+        ) THEN (am.chunk_end_seconds - GREATEST(l.call_begin_time, am.chunk_start_seconds))
+        WHEN (
+            l.call_begin_time < am.chunk_start_seconds AND
+            am.chunk_start_seconds < l.call_end_time
+        ) THEN (LEAST(l.call_end_time, am.chunk_end_seconds) -am.chunk_start_seconds)
+        ELSE
+            l.call_length_seconds END AS call_lenght_within_chunk
 FROM
     audio_metadata_df AS am INNER JOIN
     labels_df AS l 
@@ -33,7 +36,8 @@ FROM
 WHERE
     l.call_length_seconds = call_lenght_within_chunk OR
     call_lenght_within_chunk >= 0.6 * (am.chunk_end_seconds - am.chunk_start_seconds) -- 60% call lenght
-GROUP BY am.*
+QUALIFY
+    row_number() OVER (PARTITION BY am.chunk_index ORDER BY l.call_begin_time) = 1
 
 UNION BY NAME
 
