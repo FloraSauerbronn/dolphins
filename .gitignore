@@ -120,7 +120,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-dolphins/
+/dolphins/
 .env
 .venv
 env/
