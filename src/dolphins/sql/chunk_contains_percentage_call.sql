@@ -14,7 +14,7 @@ SELECT
         WHEN (
             l.call_begin_time < am.chunk_start_seconds AND
             am.chunk_start_seconds < l.call_end_time
-        ) THEN (LEAST(l.call_end_time, am.chunk_end_seconds) -am.chunk_start_seconds)
+        ) THEN (LEAST(l.call_end_time, am.chunk_end_seconds) - am.chunk_start_seconds)
         ELSE
             l.call_length_seconds END AS call_lenght_within_chunk
 FROM
@@ -34,8 +34,8 @@ FROM
             am.chunk_end_seconds < l.call_end_time
         ))
 WHERE
-    l.call_length_seconds = call_lenght_within_chunk OR
-    call_lenght_within_chunk >= 0.6 * (am.chunk_end_seconds - am.chunk_start_seconds) -- 60% call lenght
+    l.call_length_seconds = call_lenght_within_chunk OR -- 100% of call lenght within chunk to consider small calls
+    call_lenght_within_chunk >= 0.6 * (am.chunk_end_seconds - am.chunk_start_seconds) -- 60% of chunk corresponds to call
 QUALIFY
     row_number() OVER (PARTITION BY am.chunk_index ORDER BY l.call_begin_time) = 1
 
