@@ -1,0 +1,2 @@
+audio_filename,original_file_length_seconds,original_file_sample_rate,chunk_index,chunk_start_seconds,chunk_end_seconds,chunk_file_name
+audio1.wav,365.4,96_000,0,0.0,2.0,dolphins/audios/audio1/chunk_0.wav
