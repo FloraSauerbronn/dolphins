@@ -53,4 +53,7 @@ def join_target(
     with open(sql_path, "r") as file:
         sql_query: str = file.read()
         df: pd.DataFrame = duckdb.sql(sql_query).to_df()
+    
+    # Saving_df
+    df.to_csv('labels/chunk_labels.csv', index=False)
     return df
