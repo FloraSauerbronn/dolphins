@@ -34,8 +34,10 @@ FROM
             am.chunk_end_seconds < l.call_end_time
         ))
 WHERE
-    l.call_length_seconds = call_lenght_within_chunk OR -- 100% of call lenght within chunk to consider small calls
-    call_lenght_within_chunk >= 0.6 * (am.chunk_end_seconds - am.chunk_start_seconds) -- 60% of chunk corresponds to call
+    call_length_seconds > 0 AND (
+    call_length_within_chunk >= 1.2 OR
+    call_length_within_chunk >= 0.6 * call_length_seconds)
+
 QUALIFY
     row_number() OVER (PARTITION BY am.chunk_index ORDER BY l.call_begin_time) = 1
 
