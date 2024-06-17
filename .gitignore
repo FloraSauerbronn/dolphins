@@ -121,6 +121,7 @@ celerybeat.pid
 
 # Environments
 /dolphins/
+/FLIPPER2/
 .env
 .venv
 env/
