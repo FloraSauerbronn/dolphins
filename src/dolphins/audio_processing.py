@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 import numpy as np
 import pandas as pd
 from scipy.io import wavfile
-
+from scipy.signal.windows import hann
 
 def read_wav_file(audio_path: str) -> Dict[str, Any]:
     sample_rate, data = wavfile.read(audio_path)
@@ -18,12 +18,25 @@ def read_wav_file(audio_path: str) -> Dict[str, Any]:
         "num_channels": num_channels,
     }
 
+def apply_hann_window(data: np.ndarray) -> np.ndarray:
+    hann_window = hann(data.shape[0], sym=False)
+    hann_window = hann_window[:, np.newaxis]  # Ensure window shape matches data shape
+
+    if data.ndim > 1:
+        # Check if data has more than one dimension (i.e., multiple channels)
+        if data.shape[1] > 1:
+            hann_window = hann_window * np.ones((data.shape[0], data.shape[1]))
+        else:
+            hann_window = hann_window  # No need to multiply if only one channel
+
+    return data * hann_window
+
 
 def chunk_matrix_on_axis_0(data, window_size: int, step_size: int) -> np.ndarray:
     num_elements_outside_first_chunk = data.shape[0] - window_size
     if num_elements_outside_first_chunk % step_size != 0:
         raise ValueError(
-            f"Data size minus window size must ({num_elements_outside_first_chunk}) be a multiple of window size ({step_size})"
+            f"Data size minus window size ({num_elements_outside_first_chunk}) must be a multiple of step size ({step_size})"
         )
 
     chunked_shape = (
@@ -32,22 +45,26 @@ def chunk_matrix_on_axis_0(data, window_size: int, step_size: int) -> np.ndarray
         data.shape[1],
     )
     chunked_strides = (
-        data.strides[0] * step_size,  # number of bytes to skip to get to the next chunk
-        data.strides[0],  # number of bytes of each row
-        data.strides[1],  # number of bytes of each single element
+        data.strides[0] * step_size,
+        data.strides[0],
+        data.strides[1],
     )
     return np.lib.stride_tricks.as_strided(
-        data, shape=chunked_shape, strides=chunked_strides, writeable=False
+        data, shape=chunked_shape, strides=chunked_strides, writeable=True
     )
-
 
 def chunk_audio_data(
     audio: Dict[str, Any], window_seconds: float, step_seconds: float
 ) -> np.ndarray:
     window_size = int(window_seconds * audio["sample_rate"])
     step_size = int(step_seconds * audio["sample_rate"])
-    return chunk_matrix_on_axis_0(audio["data"], window_size, step_size)
+    chunked_data = chunk_matrix_on_axis_0(audio["data"], window_size, step_size)
+    
+    # Apply Hann window to each chunk and each channel
+    for i in range(chunked_data.shape[0]):
+        chunked_data[i] = apply_hann_window(chunked_data[i])
 
+    return chunked_data
 
 def round_audio(
     audio: Dict[str, Any], window_seconds: float, step_seconds: float
@@ -55,9 +72,7 @@ def round_audio(
     window_size = int(window_seconds * audio["sample_rate"])
     step_size = int(step_seconds * audio["sample_rate"])
     num_elements_outside_first_chunk = audio["num_samples"] - window_size
-    num_elems_to_keep = audio["num_samples"] - (
-        num_elements_outside_first_chunk % step_size
-    )
+    num_elems_to_keep = audio["num_samples"] - (num_elements_outside_first_chunk % step_size)
     rounded_audio_data = audio["data"][:num_elems_to_keep]
     return {
         "sample_rate": audio["sample_rate"],
@@ -66,7 +81,6 @@ def round_audio(
         "num_samples": num_elems_to_keep,
         "num_channels": audio["num_channels"],
     }
-
 
 def generate_chunks_for_audios_folder(
     audios_folder_name: str,
@@ -104,7 +118,7 @@ def generate_chunks_for_audios_folder(
             wavfile.write(
                 filename=chunk_file,
                 rate=audio["sample_rate"],
-                data=audio_chunk,
+                data=audio_chunk.astype(np.int16),  # Ensure data type is correct
             )
             metadata.append(chunk_metadata)
 
