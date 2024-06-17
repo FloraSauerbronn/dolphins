@@ -32,7 +32,7 @@ def create_dataset(
 
 def main():
     create_dataset(
-        audios_folder_name="audios",
+        audios_folder_name="D:/AUDIOS/audio_test/",
         chunks_folder_name="chunks",
         window_seconds=2,
         step_seconds=0.25,
