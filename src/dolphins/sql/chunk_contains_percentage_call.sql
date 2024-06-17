@@ -34,6 +34,7 @@ FROM
             am.chunk_end_seconds < l.call_end_time
         ))
 WHERE
+    l.label <> 'whistle' AND
     call_length_seconds > 0 AND (
     call_length_within_chunk >= 1.2 OR
     call_length_within_chunk >= 0.6 * call_length_seconds)
