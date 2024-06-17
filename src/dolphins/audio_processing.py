@@ -31,7 +31,6 @@ def apply_hann_window(data: np.ndarray) -> np.ndarray:
 
     return data * hann_window
 
-
 def chunk_matrix_on_axis_0(data, window_size: int, step_size: int) -> np.ndarray:
     num_elements_outside_first_chunk = data.shape[0] - window_size
     if num_elements_outside_first_chunk % step_size != 0:
