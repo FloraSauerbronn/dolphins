@@ -16,10 +16,18 @@ def test_join_target(join_stategy_name: str):
     fixtures_path: Path = Path("tests") / "fixtures" / "join_target" / join_stategy_name
     audio_metadata_df: pd.DataFrame = pd.read_csv(fixtures_path / "audio_metadata.csv")
     labels_df: pd.DataFrame = pd.read_csv(fixtures_path / "labels.csv")
-    actual: pd.DataFrame = join_target(
-        audio_metadata_df=audio_metadata_df,
-        labels_df=labels_df,
-        join_stategy_name="chunk_contains_percentage_call",
+    actual: pd.DataFrame = (
+        join_target(
+            audio_metadata_df=audio_metadata_df,
+            labels_df=labels_df,
+            join_stategy_name="chunk_contains_percentage_call",
+        )
+        .sort_values(by=["audio_filename", "chunk_index"])
+        .reset_index(drop=True)
     )
-    expected: pd.DataFrame = pd.read_csv(fixtures_path / "expected.csv")
+    expected: pd.DataFrame = (
+        pd.read_csv(fixtures_path / "expected.csv")
+        .sort_values(by=["audio_filename", "chunk_index"])
+        .reset_index(drop=True)
+    )
     assert_frame_equal(actual, expected, check_like=True)
