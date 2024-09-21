@@ -41,6 +41,7 @@ def build_labels_df(labels_folder_name: str) -> pd.DataFrame:
         )
         dfs_for_concatenation.append(df_to_append)
     labels_df: pd.DataFrame = pd.concat(dfs_for_concatenation, ignore_index=True)
+    labels_df.to_csv("labels/all_labels.csv", index=False)
     return labels_df
 
 
@@ -53,4 +54,5 @@ def join_target(
     with open(sql_path, "r") as file:
         sql_query: str = file.read()
         df: pd.DataFrame = duckdb.sql(sql_query).to_df()
+        df.to_csv("labels/chunk_labels.csv", index=False)
     return df
