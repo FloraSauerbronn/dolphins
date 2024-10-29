@@ -20,7 +20,7 @@ def generate_image_array_from_audio(
         mono=False,
     )
     stft = librosa.stft(
-        audio_time_series[call_channel,:],
+        audio_time_series[call_channel, :],
         n_fft=frame_size,
         hop_length=hop_size,
     )
@@ -31,7 +31,7 @@ def generate_image_array_from_audio(
         figsize=(dimension_inches, dimension_inches),
         dpi=output_image_dimension_dots,
     )
-    ax.axis('off')
+    ax.axis("off")
     ax.margins(0, 0)
     ax.set_ylim(ymin=min_frequency, ymax=max_frequency)
 
@@ -39,9 +39,9 @@ def generate_image_array_from_audio(
         y_log_scale,
         sr=sampling_rate,
         hop_length=hop_size,
-        x_axis='time',
-        y_axis='linear',
-        cmap='gray',
+        x_axis="time",
+        y_axis="linear",
+        cmap="gray",
         fmin=min_frequency,
         fmax=max_frequency,
         ax=ax,
@@ -49,12 +49,12 @@ def generate_image_array_from_audio(
     img.set_clim(-60, 10)
     fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
     fig.tight_layout(pad=0)
-    
+
     with io.BytesIO() as buf:
         fig.savefig(
             buf,
-            format='png',
-            bbox_inches='tight',
+            format="png",
+            bbox_inches="tight",
             pad_inches=0,
             dpi=output_image_dimension_dots,
         )
@@ -64,7 +64,6 @@ def generate_image_array_from_audio(
     plt.close()
 
     return image
-
 
 
 audio_path = "/Users/pedro.igor/dev/personal/dolphins/audios/chunks/LPS1142017_MF_20170804_084350_893/chunk_1112.wav"
