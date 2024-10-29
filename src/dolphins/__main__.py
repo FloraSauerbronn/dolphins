@@ -7,13 +7,11 @@ from .audio_processing import generate_chunks_for_audios_folder
 from .targets import build_labels_df, join_target
 
 
-def create_dataset(
+def create_df(
     audios_folder_name: str,
     chunks_folder_name: str,
     window_seconds: float,
     step_seconds: float,
-    sampling_rate: Optional[int],
-    mono_channel: bool,
     labels_folder_name: str,
     join_stategy_name: str,
 ) -> Dataset:
@@ -22,6 +20,14 @@ def create_dataset(
         audios_folder_name, chunks_folder_name, window_seconds, step_seconds
     )
     df: pd.DataFrame = join_target(audio_metadata_df, labels_df, join_stategy_name)
+    return df
+
+
+def create_dataset(
+    df: pd.DataFrame,
+    sampling_rate: Optional[int],
+    mono_channel: bool,
+) -> Dataset:
     audio_dataset: Dataset = (
         Dataset.from_pandas(df, preserve_index=False)
         .rename_column("chunk_file_name", "audio")
@@ -31,13 +37,11 @@ def create_dataset(
 
 
 def main():
-    create_dataset(
+    create_df(
         audios_folder_name="audios",
         chunks_folder_name="chunks",
         window_seconds=2,
         step_seconds=0.25,
-        sampling_rate=None,
-        mono_channel=False,
         labels_folder_name="labels",
         join_stategy_name="chunk_contains_percentage_call",
     )
