@@ -10,6 +10,8 @@ appnope==0.1.4
     # via ipykernel
 asttokens==2.4.1
     # via stack-data
+async-timeout==4.0.3
+    # via aiohttp
 attrs==23.2.0
     # via aiohttp
 audioread==3.0.1
@@ -44,6 +46,10 @@ dill==0.3.8
     #   multiprocess
 duckdb==0.10.1
     # via dolphins (pyproject.toml)
+exceptiongroup==1.2.2
+    # via
+    #   ipython
+    #   pytest
 executing==2.0.1
     # via stack-data
 filelock==3.13.1
@@ -66,6 +72,12 @@ idna==3.6
     # via
     #   requests
     #   yarl
+importlib-metadata==8.5.0
+    # via
+    #   build
+    #   jupyter-client
+importlib-resources==6.4.5
+    # via matplotlib
 iniconfig==2.0.0
     # via pytest
 ipykernel==6.29.2
@@ -108,6 +120,8 @@ multiprocess==0.70.16
     # via datasets
 nest-asyncio==1.6.0
     # via ipykernel
+npy-append-array==0.9.16
+    # via dolphins (pyproject.toml)
 numba==0.59.0
     # via librosa
 numpy==1.26.4
@@ -224,6 +238,12 @@ stack-data==0.6.3
     # via ipython
 threadpoolctl==3.3.0
     # via scikit-learn
+tomli==2.0.2
+    # via
+    #   build
+    #   pip-tools
+    #   pyproject-hooks
+    #   pytest
 tornado==6.4
     # via
     #   ipykernel
@@ -243,6 +263,7 @@ traitlets==5.14.1
 typing-extensions==4.9.0
     # via
     #   huggingface-hub
+    #   ipython
     #   librosa
 tzdata==2024.1
     # via pandas
@@ -256,3 +277,7 @@ xxhash==3.4.1
     # via datasets
 yarl==1.9.4
     # via aiohttp
+zipp==3.20.2
+    # via
+    #   importlib-metadata
+    #   importlib-resources

@@ -6,6 +6,8 @@ aiohttp==3.9.3
     #   fsspec
 aiosignal==1.3.1
     # via aiohttp
+async-timeout==4.0.3
+    # via aiohttp
 attrs==23.2.0
     # via aiohttp
 audioread==3.0.1
@@ -50,6 +52,8 @@ idna==3.6
     # via
     #   requests
     #   yarl
+importlib-resources==6.4.5
+    # via matplotlib
 joblib==1.3.2
     # via
     #   librosa
@@ -72,6 +76,8 @@ multidict==6.0.5
     #   yarl
 multiprocess==0.70.16
     # via datasets
+npy-append-array==0.9.16
+    # via dolphins (pyproject.toml)
 numba==0.59.0
     # via librosa
 numpy==1.26.4
@@ -160,3 +166,5 @@ xxhash==3.4.1
     # via datasets
 yarl==1.9.4
     # via aiohttp
+zipp==3.20.2
+    # via importlib-resources
