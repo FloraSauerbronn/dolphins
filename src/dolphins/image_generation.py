@@ -1,13 +1,16 @@
 import io
+from typing import Dict
 
 import librosa
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+from npy_append_array import NpyAppendArray
 
 
 def generate_image_array_from_audio(
     audio_path: str,
-    call_channel: int = 0,
+    channel_index: int = 0,
     frame_size: int = 2048,
     hop_size: int = 512,
     output_image_dimension_dots: int = 224,
@@ -20,7 +23,7 @@ def generate_image_array_from_audio(
         mono=False,
     )
     stft = librosa.stft(
-        audio_time_series[call_channel, :],
+        audio_time_series[channel_index, :],
         n_fft=frame_size,
         hop_length=hop_size,
     )
@@ -66,6 +69,18 @@ def generate_image_array_from_audio(
     return image
 
 
-audio_path = "/Users/pedro.igor/dev/personal/dolphins/audios/chunks/LPS1142017_MF_20170804_084350_893/chunk_1112.wav"
-
-arr = generate_image_array_from_audio(audio_path)
+def generate_and_save_images_npy(
+    df: pd.DataFrame,
+    audio_path_column: str,
+    channel_index_column: str,
+    output_filename: str,
+    image_generation_params: Dict[str, int] = {},
+):
+    with NpyAppendArray(output_filename, delete_if_exists=True) as npaa:
+        for _, row in df.iterrows():
+            image = generate_image_array_from_audio(
+                **image_generation_params,
+                audio_path=row[audio_path_column],
+                channel_index=row[channel_index_column],
+            )
+            npaa.append(np.expand_dims(image, axis=0))
