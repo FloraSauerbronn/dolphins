@@ -4,6 +4,7 @@ from typing import Any, Dict, List
 import numpy as np
 import pandas as pd
 from scipy.io import wavfile
+from tqdm import tqdm
 
 
 def read_wav_file(audio_path: str) -> Dict[str, Any]:
@@ -80,6 +81,7 @@ def generate_chunks_for_audios_folder(
 
     metadata: List[Dict[str, Any]] = []
     for audio_file in audios_folder.glob("*.wav"):
+        print(f"Generating chunks for {audio_file.name}")
         audio = read_wav_file(audio_file)
         rounded_audio = round_audio(audio, window_seconds, step_seconds)
         chunked_audio_data = chunk_audio_data(
@@ -89,7 +91,7 @@ def generate_chunks_for_audios_folder(
         )
         audio_chunk_folder = chunks_folder / audio_file.stem
         audio_chunk_folder.mkdir(parents=True, exist_ok=True)
-        for index, audio_chunk in enumerate(chunked_audio_data):
+        for index, audio_chunk in tqdm(enumerate(chunked_audio_data), total=len(chunked_audio_data)):
             chunk_file = audio_chunk_folder / f"chunk_{index}.wav"
             chunk_metadata = {
                 "audio_filename": audio_file.name,
@@ -100,7 +102,6 @@ def generate_chunks_for_audios_folder(
                 "chunk_end_seconds": (index * step_seconds) + window_seconds,
                 "chunk_file_name": chunk_file.resolve().__str__(),
             }
-            print(f"Saving {chunk_file}")
             wavfile.write(
                 filename=chunk_file,
                 rate=audio["sample_rate"],

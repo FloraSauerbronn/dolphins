@@ -77,6 +77,7 @@ def generate_and_save_images_npy(
     output_filename: str,
     image_generation_params: Dict[str, int] = {},
 ):
+    print(f"\nGenerating images and saving to {output_filename}")
     with NpyAppendArray(output_filename, delete_if_exists=True) as npaa:
         for _, row in tqdm(df.iterrows(), total=len(df)):
             channel_index = np.nan_to_num(row[channel_index_column], nan=1).astype(int) - 1
