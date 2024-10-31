@@ -64,7 +64,7 @@ def generate_image_array_from_audio(
         )
         buf.seek(0)
         # Read image and covert from RGBA to RGB
-        image = plt.imread(buf)[..., :3]
+        image = plt.imread(buf)[..., :3].T
     plt.close()
 
     return image
