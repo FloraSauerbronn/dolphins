@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from npy_append_array import NpyAppendArray
+from tqdm import tqdm
 
 
 def generate_image_array_from_audio(
@@ -77,10 +78,11 @@ def generate_and_save_images_npy(
     image_generation_params: Dict[str, int] = {},
 ):
     with NpyAppendArray(output_filename, delete_if_exists=True) as npaa:
-        for _, row in df.iterrows():
+        for _, row in tqdm(df.iterrows(), total=len(df)):
+            channel_index = np.nan_to_num(row[channel_index_column], nan=1).astype(int) - 1
             image = generate_image_array_from_audio(
                 **image_generation_params,
                 audio_path=row[audio_path_column],
-                channel_index=row[channel_index_column],
+                channel_index=channel_index,
             )
             npaa.append(np.expand_dims(image, axis=0))
