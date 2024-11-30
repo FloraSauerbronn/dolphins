@@ -40,7 +40,7 @@ FROM (
 ) AS t
 WHERE
     t.call_length_seconds = t.call_length_within_chunk OR -- 100% of call length within chunk to consider small calls
-    t.call_length_within_chunk >= 0.6 * (t.chunk_end_seconds - t.chunk_start_seconds) -- 60% of chunk corresponds to call
+    t.call_length_within_chunk >= {minimum_percentage_of_call_in_chunk} * (t.chunk_end_seconds - t.chunk_start_seconds)
 
 UNION BY NAME
 

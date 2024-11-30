@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 import pandas as pd
 from datasets import Audio, Dataset
@@ -16,12 +16,15 @@ def create_df(
     step_seconds: float,
     labels_folder_name: str,
     join_stategy_name: str,
+    sql_query_params: Dict[str, Any],
 ) -> Dataset:
     labels_df: pd.DataFrame = build_labels_df(labels_folder_name)
     audio_metadata_df: pd.DataFrame = generate_chunks_for_audios_folder(
         audios_folder_name, chunks_folder_name, window_seconds, step_seconds
     )
-    df: pd.DataFrame = join_target(audio_metadata_df, labels_df, join_stategy_name)
+    df: pd.DataFrame = join_target(
+        audio_metadata_df, labels_df, join_stategy_name, sql_query_params
+    )
     return df
 
 
@@ -46,6 +49,9 @@ def main():
         step_seconds=0.25,
         labels_folder_name="labels",
         join_stategy_name="chunk_contains_percentage_call",
+        minimum_percentage_of_call_in_chunk={
+            "minimum_percentage_of_call_in_chunk": 0.6,
+        },
     )
 
     split_proportions = {

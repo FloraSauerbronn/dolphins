@@ -21,6 +21,9 @@ def test_join_target(join_stategy_name: str):
             audio_metadata_df=audio_metadata_df,
             labels_df=labels_df,
             join_stategy_name="chunk_contains_percentage_call",
+            sql_query_params={
+                "minimum_percentage_of_call_in_chunk": 0.6,
+            },
         )
         .sort_values(by=["audio_filename", "chunk_index"])
         .reset_index(drop=True)

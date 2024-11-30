@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List
+from typing import Any, Dict, List
 
 import duckdb
 import pandas as pd
@@ -48,9 +48,10 @@ def join_target(
     audio_metadata_df: pd.DataFrame,
     labels_df: pd.DataFrame,
     join_stategy_name: str,
+    sql_query_params: Dict[str, Any],
 ) -> pd.DataFrame:
     sql_path: Path = Path(".") / "src" / "dolphins" / "sql" / f"{join_stategy_name}.sql"
     with open(sql_path, "r") as file:
-        sql_query: str = file.read()
+        sql_query: str = file.read().format(**sql_query_params)
         df: pd.DataFrame = duckdb.sql(sql_query).to_df()
     return df
