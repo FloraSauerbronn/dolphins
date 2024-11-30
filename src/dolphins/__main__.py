@@ -18,7 +18,7 @@ def create_df(
     join_stategy_name: str,
     sql_query_params: Dict[str, Any],
     num_channels: int,
-) -> Dataset:
+) -> pd.DataFrame:
     labels_df: pd.DataFrame = build_labels_df(labels_folder_name)
     audio_metadata_df: pd.DataFrame = generate_chunks_for_audios_folder(
         audios_folder_name,
@@ -58,7 +58,7 @@ def main():
             "minimum_percentage_of_call_in_chunk": 0.6,
         },
         num_channels=4,
-    )
+    ).query("label != 'whistle'")
 
     split_proportions = {
         "train": 0.7,
@@ -66,7 +66,7 @@ def main():
         "test": 0.1,
     }
     df_with_splits = get_df_with_split_by_audio_chunks_count(
-        df.query("label != 'whistle'"),
+        df,
         audio_name_column="audio_filename",
         split_name_to_fraction=split_proportions,
         random_seed=42,
