@@ -25,12 +25,12 @@ def test_join_target(join_stategy_name: str):
                 "minimum_percentage_of_call_in_chunk": 0.6,
             },
         )
-        .sort_values(by=["audio_filename", "chunk_index"])
+        .sort_values(by=["audio_filename", "chunk_index", "channel"])
         .reset_index(drop=True)
     )
     expected: pd.DataFrame = (
         pd.read_csv(fixtures_path / "expected.csv")
-        .sort_values(by=["audio_filename", "chunk_index"])
+        .sort_values(by=["audio_filename", "chunk_index", "channel"])
         .reset_index(drop=True)
     )
     assert_frame_equal(actual, expected, check_like=True)
