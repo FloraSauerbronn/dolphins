@@ -2,5 +2,12 @@ audio_filename,channel,label,call_begin_time,call_end_time,call_length_seconds
 audio1.wav,1,click,0.0,0.5,0.5
 audio1.wav,2,click,1.0,3.0,2.0
 audio1.wav,1,click,4.0,4.5,0.5
+
 audio2.wav,3,click,0.5,1.5,1.0
 audio2.wav,4,click,3.0,8.5,5.5
+
+audio3.wav,3,click,0.0,1.5,1.5
+audio3.wav,4,click,0.01,1.53,1.52
+audio3.wav,2,click,2.0,4.0,2.0
+audio3.wav,3,click,2.05,4.00,1.95
+audio3.wav,4,click,2.10,3.90,1.80
