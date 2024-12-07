@@ -72,7 +72,7 @@ def main():
         generate_and_save_images_npy(
             df_with_splits.query(f"split_name == '{split_name}'"),
             audio_path_column="chunk_file_name",
-            channel_index_column="call_channel",
+            channel_column="channel",
             output_filename=f"audio_imgs_{split_name}.npy",
         )
 
