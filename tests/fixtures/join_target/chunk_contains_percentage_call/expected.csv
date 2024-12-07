@@ -307,8 +307,6 @@ audio2.wav,10,96_000,29,7.25,9.25,dolphins/audios/audio2/chunk_29.wav,no_call,,,
 audio2.wav,10,96_000,29,7.25,9.25,dolphins/audios/audio2/chunk_29.wav,click,3.0,8.5,5.5,4,1.25
 
 
-
-,,,,,,,label,call_begin_time,call_end_time,call_length_seconds,channel,call_length_within_chunk
 audio3.wav,8,96_000,0,0.0,2.0,dolphins/audios/audio3/chunk_0.wav,no_call,,,,1,,
 audio3.wav,8,96_000,0,0.0,2.0,dolphins/audios/audio3/chunk_0.wav,no_call,,,,2,,
 audio3.wav,8,96_000,0,0.0,2.0,dolphins/audios/audio3/chunk_0.wav,click,0.0,1.5,1.5,3,1.5,
