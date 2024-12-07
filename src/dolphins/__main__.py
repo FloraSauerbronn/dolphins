@@ -54,7 +54,7 @@ def main():
         step_seconds=0.25,
         labels_folder_name="labels",
         join_stategy_name="chunk_contains_percentage_call",
-        minimum_percentage_of_call_in_chunk={
+        sql_query_params={
             "minimum_percentage_of_call_in_chunk": 0.6,
         },
         num_channels=4,

@@ -80,10 +80,9 @@ def generate_and_save_images_npy(
     print(f"\nGenerating images and saving to {output_filename}")
     with NpyAppendArray(output_filename, delete_if_exists=True) as npaa:
         for _, row in tqdm(df.iterrows(), total=len(df)):
-            channel_index = row[channel_column].astype(int) - 1
             image = generate_image_array_from_audio(
                 **image_generation_params,
                 audio_path=row[audio_path_column],
-                channel_index=channel_index,
+                channel_index=row[channel_column] - 1,
             )
             npaa.append(np.expand_dims(image, axis=0))
