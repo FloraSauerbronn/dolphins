@@ -73,10 +73,7 @@ def generate_metadata_per_channel(
     df: pd.DataFrame,
     num_channels: int,
 ) -> pd.DataFrame:
-    dfs = [
-        df.assign(channel=channel)
-        for channel in range(1, num_channels + 1)
-    ]
+    dfs = [df.assign(channel=channel) for channel in range(1, num_channels + 1)]
     return pd.concat(dfs, ignore_index=True).reset_index(drop=True)
 
 

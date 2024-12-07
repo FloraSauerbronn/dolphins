@@ -21,7 +21,11 @@ def create_df(
 ) -> Dataset:
     labels_df: pd.DataFrame = build_labels_df(labels_folder_name)
     audio_metadata_df: pd.DataFrame = generate_chunks_for_audios_folder(
-        audios_folder_name, chunks_folder_name, window_seconds, step_seconds, num_channels,
+        audios_folder_name,
+        chunks_folder_name,
+        window_seconds,
+        step_seconds,
+        num_channels,
     )
     df: pd.DataFrame = join_target(
         audio_metadata_df, labels_df, join_stategy_name, sql_query_params
