@@ -1,4 +1,4 @@
-audio_filename,call_channel,label,call_begin_time,call_end_time,call_length_seconds
+audio_filename,channel,label,call_begin_time,call_end_time,call_length_seconds
 audio1.wav,1,click,0.0,0.5,0.5
 audio1.wav,2,click,1.0,3.0,2.0
 audio1.wav,1,click,4.0,4.5,0.5
