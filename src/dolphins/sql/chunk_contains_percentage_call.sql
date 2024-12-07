@@ -7,7 +7,6 @@ FROM (
         l.call_begin_time AS call_begin_time,
         l.call_end_time AS call_end_time,
         l.call_length_seconds AS call_length_seconds,
-        l.channel AS channel,
         CASE
             WHEN (
                 l.call_begin_time < am.chunk_end_seconds AND
