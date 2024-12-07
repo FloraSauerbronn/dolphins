@@ -69,11 +69,23 @@ def round_audio(
     }
 
 
+def generate_metadata_per_channel(
+    df: pd.DataFrame,
+    num_channels: int,
+) -> pd.DataFrame:
+    dfs = [
+        df.assign(channel=channel)
+        for channel in range(1, num_channels + 1)
+    ]
+    return pd.concat(dfs, ignore_index=True).reset_index(drop=True)
+
+
 def generate_chunks_for_audios_folder(
     audios_folder_name: str,
     chunks_folder_name: str,
     window_seconds: float,
     step_seconds: float,
+    num_channels: int,
 ) -> pd.DataFrame:
     audios_folder = Path(audios_folder_name)
     chunks_folder = audios_folder / chunks_folder_name
@@ -111,4 +123,7 @@ def generate_chunks_for_audios_folder(
             )
             metadata.append(chunk_metadata)
 
-    return pd.DataFrame(metadata)
+    return generate_metadata_per_channel(
+        df=pd.DataFrame(metadata),
+        num_channels=num_channels,
+    )
