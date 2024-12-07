@@ -15,7 +15,7 @@ def build_labels_df(labels_folder_name: str) -> pd.DataFrame:
         df_to_append = (
             df.rename(
                 columns={
-                    "Channel": "call_channel",
+                    "Channel": "channel",
                     "Type": "label",
                     "Begin time (s)": "call_begin_time",
                     "End time (s)": "call_end_time",
@@ -31,7 +31,7 @@ def build_labels_df(labels_folder_name: str) -> pd.DataFrame:
             .dropna(subset=["label"])[
                 [
                     "audio_filename",
-                    "call_channel",
+                    "channel",
                     "label",
                     "call_begin_time",
                     "call_end_time",

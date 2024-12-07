@@ -17,10 +17,15 @@ def create_df(
     labels_folder_name: str,
     join_stategy_name: str,
     sql_query_params: Dict[str, Any],
+    num_channels: int,
 ) -> Dataset:
     labels_df: pd.DataFrame = build_labels_df(labels_folder_name)
     audio_metadata_df: pd.DataFrame = generate_chunks_for_audios_folder(
-        audios_folder_name, chunks_folder_name, window_seconds, step_seconds
+        audios_folder_name,
+        chunks_folder_name,
+        window_seconds,
+        step_seconds,
+        num_channels,
     )
     df: pd.DataFrame = join_target(
         audio_metadata_df, labels_df, join_stategy_name, sql_query_params
@@ -52,6 +57,7 @@ def main():
         minimum_percentage_of_call_in_chunk={
             "minimum_percentage_of_call_in_chunk": 0.6,
         },
+        num_channels=4,
     )
 
     split_proportions = {
@@ -70,7 +76,7 @@ def main():
         generate_and_save_images_npy(
             df_with_splits.query(f"split_name == '{split_name}'"),
             audio_path_column="chunk_file_name",
-            channel_index_column="call_channel",
+            channel_column="channel",
             output_filename=f"audio_imgs_{split_name}.npy",
         )
 
