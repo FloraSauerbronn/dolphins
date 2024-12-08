@@ -1,0 +1,3 @@
+# Ignore everything but the gitignore file itself
+*
+!.gitignore

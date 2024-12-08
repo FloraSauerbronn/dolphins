@@ -1,7 +1,0 @@
-# Ignore everything but the gitignore file itself
-*
-!.gitignore
-!/labels/.gitignore
-!/audios/.gitignore
-!/npys/.gitignore
-!/tables/.gitignore
