@@ -1,7 +1,6 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 import pandas as pd
-from datasets import Audio, Dataset
 
 from .audio_processing import generate_chunks_for_audios_folder
 from .data_split import get_df_with_split_by_audio_chunks_count
@@ -31,19 +30,6 @@ def create_df(
         audio_metadata_df, labels_df, join_stategy_name, sql_query_params
     )
     return df
-
-
-def create_dataset(
-    df: pd.DataFrame,
-    sampling_rate: Optional[int],
-    mono_channel: bool,
-) -> Dataset:
-    audio_dataset: Dataset = (
-        Dataset.from_pandas(df, preserve_index=False)
-        .rename_column("chunk_file_name", "audio")
-        .cast_column("audio", Audio(sampling_rate=sampling_rate, mono=mono_channel))
-    )
-    return audio_dataset
 
 
 def main():
