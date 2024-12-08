@@ -36,13 +36,14 @@ def create_df(
 
 def main():
     audios_folder_name = "data/audios"
+    chunks_folder_name = "data/chunks"
     labels_folder_name = "data/labels"
-    tables_folder_name = "data/tables"
     npys_folder_name = "data/npys"
+    tables_folder_name = "data/tables"
 
     base_metadata_df: pd.DataFrame = create_df(
         audios_folder_name=audios_folder_name,
-        chunks_folder_name="chunks",
+        chunks_folder_name=chunks_folder_name,
         window_seconds=2,
         step_seconds=0.25,
         labels_folder_name=labels_folder_name,

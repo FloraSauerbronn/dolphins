@@ -85,8 +85,7 @@ def generate_chunks_for_audios_folder(
     num_channels: int,
 ) -> pd.DataFrame:
     audios_folder = Path(audios_folder_name)
-    chunks_folder = audios_folder / chunks_folder_name
-    chunks_folder.mkdir(parents=True, exist_ok=True)
+    chunks_folder = Path(chunks_folder_name)
 
     metadata: List[Dict[str, Any]] = []
     for audio_file in audios_folder.glob("*.wav"):
