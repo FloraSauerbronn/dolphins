@@ -35,7 +35,7 @@ def create_df(
 
 
 def run(config: Dict[str, Any]):
-    folders = config["folders"]
+    folders: Dict[str, str] = config["folders"]
 
     base_metadata_df: pd.DataFrame = create_df(
         audios_folder_name=folders.get("audios_folder_name"),
@@ -52,7 +52,7 @@ def run(config: Dict[str, Any]):
         file_name="base_metadata",
     )
 
-    split_params = config.get("split")
+    split_params: Dict[str, Any] = config.get("split")
     df_with_splits = get_df_with_split_by_audio_chunks_count(
         base_metadata_df,
         audio_name_column="audio_filename",
