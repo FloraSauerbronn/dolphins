@@ -34,11 +34,11 @@ def create_df(
 
 def main():
     df: pd.DataFrame = create_df(
-        audios_folder_name="audios",
+        audios_folder_name="data/audios",
         chunks_folder_name="chunks",
         window_seconds=2,
         step_seconds=0.25,
-        labels_folder_name="labels",
+        labels_folder_name="data/labels",
         join_stategy_name="chunk_contains_percentage_call",
         sql_query_params={
             "minimum_percentage_of_call_in_chunk": 0.6,
@@ -63,7 +63,7 @@ def main():
             df_with_splits.query(f"split_name == '{split_name}'"),
             audio_path_column="chunk_file_name",
             channel_column="channel",
-            output_filename=f"audio_imgs_{split_name}.npy",
+            output_filename=f"data/npys/audio_imgs_{split_name}.npy",
             image_generation_params={
                 "output_image_dimension_dots": 224,
                 "frame_size": 2048,
