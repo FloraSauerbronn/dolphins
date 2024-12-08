@@ -11,12 +11,12 @@ from tqdm import tqdm
 
 def generate_image_array_from_audio(
     audio_path: str,
-    channel_index: int = 0,
-    frame_size: int = 2048,
-    hop_size: int = 512,
-    output_image_dimension_dots: int = 224,
-    min_frequency: int = 15_000,
-    max_frequency: int = 48_000,
+    channel_index: int,
+    frame_size: int,
+    hop_size: int,
+    output_image_dimension_dots: int,
+    min_frequency: int,
+    max_frequency: int,
 ) -> np.ndarray:
     audio_time_series, sampling_rate = librosa.load(
         audio_path,
@@ -75,7 +75,7 @@ def generate_and_save_images_npy(
     audio_path_column: str,
     channel_column: str,
     output_filename: str,
-    image_generation_params: Dict[str, int] = {},
+    image_generation_params: Dict[str, int],
 ):
     print(f"\nGenerating images and saving to {output_filename}")
     with NpyAppendArray(output_filename, delete_if_exists=True) as npaa:

@@ -1,7 +1,6 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 import pandas as pd
-from datasets import Audio, Dataset
 
 from .audio_processing import generate_chunks_for_audios_folder
 from .data_split import get_df_with_split_by_audio_chunks_count
@@ -18,7 +17,7 @@ def create_df(
     join_stategy_name: str,
     sql_query_params: Dict[str, Any],
     num_channels: int,
-) -> Dataset:
+) -> pd.DataFrame:
     labels_df: pd.DataFrame = build_labels_df(labels_folder_name)
     audio_metadata_df: pd.DataFrame = generate_chunks_for_audios_folder(
         audios_folder_name,
@@ -33,19 +32,6 @@ def create_df(
     return df
 
 
-def create_dataset(
-    df: pd.DataFrame,
-    sampling_rate: Optional[int],
-    mono_channel: bool,
-) -> Dataset:
-    audio_dataset: Dataset = (
-        Dataset.from_pandas(df, preserve_index=False)
-        .rename_column("chunk_file_name", "audio")
-        .cast_column("audio", Audio(sampling_rate=sampling_rate, mono=mono_channel))
-    )
-    return audio_dataset
-
-
 def main():
     df: pd.DataFrame = create_df(
         audios_folder_name="audios",
@@ -58,7 +44,7 @@ def main():
             "minimum_percentage_of_call_in_chunk": 0.6,
         },
         num_channels=4,
-    )
+    ).query("label != 'whistle'")
 
     split_proportions = {
         "train": 0.7,
@@ -66,7 +52,7 @@ def main():
         "test": 0.1,
     }
     df_with_splits = get_df_with_split_by_audio_chunks_count(
-        df.query("label != 'whistle'"),
+        df,
         audio_name_column="audio_filename",
         split_name_to_fraction=split_proportions,
         random_seed=42,
@@ -78,6 +64,13 @@ def main():
             audio_path_column="chunk_file_name",
             channel_column="channel",
             output_filename=f"audio_imgs_{split_name}.npy",
+            image_generation_params={
+                "output_image_dimension_dots": 224,
+                "frame_size": 2048,
+                "hop_size": 512,
+                "min_frequency": 15_000,
+                "max_frequency": 48_000,
+            },
         )
 
 
