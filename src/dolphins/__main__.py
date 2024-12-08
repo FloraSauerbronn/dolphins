@@ -78,6 +78,13 @@ def main():
             audio_path_column="chunk_file_name",
             channel_column="channel",
             output_filename=f"audio_imgs_{split_name}.npy",
+            image_generation_params={
+                "output_image_dimension_dots": 224,
+                "frame_size": 2048,
+                "hop_size": 512,
+                "min_frequency": 15_000,
+                "max_frequency": 48_000,
+            },
         )
 
 
