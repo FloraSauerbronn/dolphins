@@ -29,8 +29,18 @@ def get_df_with_split_by_audio_chunks_count(
         for split_name, audios in split_to_audios.items()
         for audio in audios
     }
-
-    return df.assign(split_name=df[audio_name_column].map(audio_to_split))
+    df_with_splits = df.assign(split_name=df[audio_name_column].map(audio_to_split))
+    split_index = (
+        df_with_splits.groupby("split_name")
+        .rank(method="first", ascending=True)
+        .iloc[:, 0]
+        .astype(int)
+    )
+    return (
+        df_with_splits.assign(split_index=split_index)
+        .sort_values(["split_name", "split_index"])
+        .reset_index(drop=True)
+    )
 
 
 def random_split_with_expected_group_sum_fractions(

@@ -72,14 +72,18 @@ def generate_image_array_from_audio(
 
 def generate_and_save_images_npy(
     df: pd.DataFrame,
+    split_name: str,
     audio_path_column: str,
     channel_column: str,
     output_filename: str,
     image_generation_params: Dict[str, int],
 ):
+    df_filtered = df.query(f"split_name == '{split_name}'").sort_values(
+        ["split_name", "split_index"]
+    )
     print(f"\nGenerating images and saving to {output_filename}")
     with NpyAppendArray(output_filename, delete_if_exists=True) as npaa:
-        for _, row in tqdm(df.iterrows(), total=len(df)):
+        for _, row in tqdm(df_filtered.iterrows(), total=len(df_filtered)):
             image = generate_image_array_from_audio(
                 **image_generation_params,
                 audio_path=row[audio_path_column],

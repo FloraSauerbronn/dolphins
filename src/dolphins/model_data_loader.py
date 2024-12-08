@@ -12,7 +12,9 @@ class DolphinsDataset(Dataset):
         df: pd.DataFrame,
         split_name: str,
     ):
-        self.metadata_df = df.query(f"split_name == '{split_name}'")
+        self.metadata_df = df.query(f"split_name == '{split_name}'").sort_values(
+            ["split_name", "split_index"]
+        )
         self.transform = Compose(
             [
                 Lambda(lambda x: torch.tensor(x, dtype=torch.float32)),
