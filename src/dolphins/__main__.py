@@ -3,6 +3,7 @@ from typing import Any, Dict, List
 import pandas as pd
 
 from .audio_processing import generate_chunks_for_audios_folder
+from .config import CONFIG
 from .data_split import get_df_with_split_by_audio_chunks_count
 from .image_generation import generate_and_save_images_npy
 from .targets import build_labels_df, join_target
@@ -34,65 +35,46 @@ def create_df(
     return df[~df["label"].isin(labels_to_remove)]
 
 
-def main():
-    audios_folder_name = "data/audios"
-    chunks_folder_name = "data/chunks"
-    labels_folder_name = "data/labels"
-    npys_folder_name = "data/npys"
-    tables_folder_name = "data/tables"
+def main(config: Dict[str, Any]):
+    folders = config["folders"]
 
     base_metadata_df: pd.DataFrame = create_df(
-        audios_folder_name=audios_folder_name,
-        chunks_folder_name=chunks_folder_name,
-        window_seconds=2,
-        step_seconds=0.25,
-        labels_folder_name=labels_folder_name,
+        audios_folder_name=folders.get("audios_folder_name"),
+        chunks_folder_name=folders.get("chunks_folder_name"),
+        labels_folder_name=folders.get("labels_folder_name"),
         join_stategy_name="chunk_contains_percentage_call",
-        sql_query_params={
-            "minimum_percentage_of_call_in_chunk": 0.6,
-        },
-        num_channels=4,
-        labels_to_remove=["whistle"],
+        **config.get("chunk_params"),
+        num_channels=config.get("num_channels"),
+        labels_to_remove=config.get("labels_to_remove"),
     )
     save_table(
         base_metadata_df,
-        folder_path=tables_folder_name,
+        folder_path=folders.get("tables_folder_name"),
         file_name="base_metadata",
     )
 
-    split_proportions = {
-        "train": 0.7,
-        "val": 0.2,
-        "test": 0.1,
-    }
+    split_params = config.get("split")
     df_with_splits = get_df_with_split_by_audio_chunks_count(
         base_metadata_df,
         audio_name_column="audio_filename",
-        split_name_to_fraction=split_proportions,
-        random_seed=42,
+        **split_params,
     )
     save_table(
         df_with_splits,
-        folder_path=tables_folder_name,
+        folder_path=folders.get("tables_folder_name"),
         file_name="metadata_with_splits",
     )
 
-    for split_name in split_proportions:
+    for split_name in split_params.get("split_name_to_fraction"):
         generate_and_save_images_npy(
             df_with_splits,
             split_name=split_name,
             audio_path_column="chunk_file_name",
             channel_column="channel",
-            output_filename=f"{npys_folder_name}/audio_imgs_{split_name}.npy",
-            image_generation_params={
-                "output_image_dimension_dots": 224,
-                "frame_size": 2048,
-                "hop_size": 512,
-                "min_frequency": 15_000,
-                "max_frequency": 48_000,
-            },
+            output_filename=f"{folders.get('npys_folder_name')}/audio_imgs_{split_name}.npy",
+            image_generation_params=config.get("image_generation_params"),
         )
 
 
 if __name__ == "__main__":
-    main()
+    main(CONFIG)
