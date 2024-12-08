@@ -57,6 +57,7 @@ def main():
         split_name_to_fraction=split_proportions,
         random_seed=42,
     )
+    df_with_splits.to_parquet("data/tables/df_with_splits.parquet")
 
     for split_name in split_proportions:
         generate_and_save_images_npy(

@@ -80,6 +80,8 @@ platformdirs==4.2.0
     # via pooch
 pooch==1.8.1
     # via librosa
+pyarrow==18.1.0
+    # via dolphins (pyproject.toml)
 pycparser==2.21
     # via cffi
 pyparsing==3.2.0
@@ -99,6 +101,8 @@ scipy==1.12.0
     #   dolphins (pyproject.toml)
     #   librosa
     #   scikit-learn
+setuptools==75.6.0
+    # via torch
 six==1.16.0
     # via python-dateutil
 soundfile==0.12.1

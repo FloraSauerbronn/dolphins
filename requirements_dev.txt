@@ -30,10 +30,6 @@ decorator==5.1.1
     #   librosa
 duckdb==0.10.1
     # via dolphins (pyproject.toml)
-exceptiongroup==1.2.2
-    # via
-    #   ipython
-    #   pytest
 executing==2.0.1
     # via stack-data
 filelock==3.16.1
@@ -143,6 +139,8 @@ ptyprocess==0.7.0
     # via pexpect
 pure-eval==0.2.2
     # via stack-data
+pyarrow==18.1.0
+    # via dolphins (pyproject.toml)
 pycparser==2.21
     # via cffi
 pygments==2.17.2
@@ -178,7 +176,9 @@ scipy==1.12.0
     #   librosa
     #   scikit-learn
 setuptools==69.1.0
-    # via pip-tools
+    # via
+    #   pip-tools
+    #   torch
 six==1.16.0
     # via
     #   asttokens
@@ -193,12 +193,6 @@ sympy==1.13.1
     # via torch
 threadpoolctl==3.3.0
     # via scikit-learn
-tomli==2.2.1
-    # via
-    #   build
-    #   pip-tools
-    #   pyproject-hooks
-    #   pytest
 torch==2.5.1
     # via
     #   dolphins (pyproject.toml)
