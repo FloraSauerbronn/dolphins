@@ -1,6 +1,6 @@
 from .config import CONFIG
-from .controller import run
+from .controllers import run_all
 
 
 if __name__ == "__main__":
-    run(CONFIG)
+    run_all(CONFIG)

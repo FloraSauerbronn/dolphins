@@ -6,7 +6,7 @@ from .audio_processing import generate_chunks_for_audios_folder
 from .data_split import get_df_with_split_by_audio_chunks_count
 from .image_generation import generate_and_save_images_npy
 from .targets import build_labels_df, join_target
-from .utils import save_table
+from .utils import read_table, save_table
 
 
 def create_df(
@@ -34,9 +34,8 @@ def create_df(
     return df[~df["label"].isin(labels_to_remove)]
 
 
-def run(config: Dict[str, Any]):
+def run_chunks_and_base_metadata(config: Dict[str, Any]):
     folders: Dict[str, str] = config["folders"]
-
     base_metadata_df: pd.DataFrame = create_df(
         audios_folder_name=folders.get("audios_folder_name"),
         chunks_folder_name=folders.get("chunks_folder_name"),
@@ -48,11 +47,14 @@ def run(config: Dict[str, Any]):
     )
     save_table(
         base_metadata_df,
-        folder_path=folders.get("tables_folder_name"),
-        file_name="base_metadata",
+        config=config,
+        table_name_key="base_metadata",
     )
 
+
+def run_splits(config: Dict[str, Any]):
     split_params: Dict[str, Any] = config.get("split")
+    base_metadata_df = read_table(config, "base_metadata")
     df_with_splits = get_df_with_split_by_audio_chunks_count(
         base_metadata_df,
         audio_name_column="audio_filename",
@@ -60,10 +62,15 @@ def run(config: Dict[str, Any]):
     )
     save_table(
         df_with_splits,
-        folder_path=folders.get("tables_folder_name"),
-        file_name="metadata_with_splits",
+        config=config,
+        table_name_key="metadata_with_splits",
     )
 
+
+def run_images(config: Dict[str, Any]):
+    folders: Dict[str, str] = config["folders"]
+    split_params: Dict[str, Any] = config.get("split")
+    df_with_splits = read_table(config, "metadata_with_splits")
     for split_name in split_params.get("split_name_to_fraction"):
         generate_and_save_images_npy(
             df_with_splits,
@@ -73,3 +80,9 @@ def run(config: Dict[str, Any]):
             output_filename=f"{folders.get('npys_folder_name')}/audio_imgs_{split_name}.npy",
             image_generation_params=config.get("image_generation_params"),
         )
+
+
+def run_all(config: Dict[str, Any]):
+    run_chunks_and_base_metadata(config)
+    run_splits(config)
+    run_images(config)

@@ -6,6 +6,10 @@ CONFIG = {
         "npys_folder_name": "data/npys",
         "tables_folder_name": "data/tables",
     },
+    "table_names": {
+        "base_metadata": "base_metadata",
+        "metadata_with_splits": "metadata_with_splits",
+    },
     "chunk_params": {
         "window_seconds": 2,
         "step_seconds": 0.25,
