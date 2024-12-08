@@ -11,11 +11,9 @@ class DolphinsDataset(Dataset):
         npy_path: str,
         df: pd.DataFrame,
         split_name: str,
-        transform=None,
     ):
         self.metadata_df = df.query(f"split_name == '{split_name}'")
-        self.npy_path = npy_path
-        default_transform = Compose(
+        self.transform = Compose(
             [
                 Lambda(lambda x: torch.tensor(x, dtype=torch.float32)),
                 Normalize(
@@ -24,11 +22,10 @@ class DolphinsDataset(Dataset):
                 ),
             ]
         )
-        self.transform = transform if transform else default_transform
         self.data = np.load(npy_path, mmap_mode="r")
 
     def __len__(self):
-        return self.data.shape[0]
+        return len(self.metadata_df)
 
     def __getitem__(self, idx):
         data = self.transform(self.data[idx]).clone().detach().float() / 255.0
