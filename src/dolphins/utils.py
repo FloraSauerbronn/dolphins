@@ -1,6 +1,7 @@
 from functools import wraps
 from pathlib import Path
 from time import time
+from typing import Any, Dict
 
 import pandas as pd
 
@@ -21,9 +22,19 @@ def timing(f):
 
 def save_table(
     df: pd.DataFrame,
-    folder_path: str,
-    file_name: str,
+    config: Dict[str, Any],
+    table_name_key: str,
 ):
-    folder = Path(folder_path)
+    folder = Path(config["folders"]["tables_folder_name"])
+    file_name = config["table_names"][table_name_key]
     df.to_parquet(folder / f"{file_name}.parquet", index=False)
     df.to_csv(folder / f"{file_name}.csv", index=False)
+
+
+def read_table(
+    config: Dict[str, Any],
+    table_name_key: str,
+) -> pd.DataFrame:
+    folder = Path(config["folders"]["tables_folder_name"])
+    file_name = config["table_names"][table_name_key]
+    return pd.read_parquet(folder / f"{file_name}.parquet")
