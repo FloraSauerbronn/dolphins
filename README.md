@@ -25,11 +25,12 @@ Consultancy for Flora's 🌺 master thesis.
 
 ## Usage
 
-### Placing data files
-* Audio files should be placed in the `audios` directory.
-* Annotation CSVs should be placed in the `labels` directory. Obs.: each CSV should have a prefix equal to the name of the corresponding audio file plus a suffix separated by a dot (`.`).
+### Configuration
+* The `config.py` sets all the configurations for the project.
+* Audio files should be placed in the `audios` folder as specified in the config.
+* Annotation CSVs should be placed in the `labels` directory as specified in the config. Obs.: each CSV should have a prefix equal to the name of the corresponding audio file plus a suffix separated by a dot (`.`).
 
-### Run the main script with
+### Check the commands available in the CLI with
 ```bash
 python -m dolphins
 ```
