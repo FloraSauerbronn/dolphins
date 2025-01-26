@@ -25,7 +25,7 @@ def build_labels_df(labels_folder_name: str) -> pd.DataFrame:
                 audio_filename=labels_file.name.split(".")[0] + ".wav",
                 call_length_seconds=lambda x: x.call_end_time - x.call_begin_time,
                 label=lambda x: x.label.str.capitalize().replace(
-                    {"^W.*": "whistle", "^C.*": "click"}, regex=True
+                    {"^W.*": "whistle", "^C.*": "click", "^L.*":"click"}, regex=True
                 ),
             )
             .dropna(subset=["label"])[

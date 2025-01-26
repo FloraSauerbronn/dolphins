@@ -1,9 +1,9 @@
 CONFIG = {
     "folders": {
-        "audios_folder_name": "data/audios",
-        "chunks_folder_name": "data/chunks",
+        "audios_folder_name": "E:/all_audios",
+        "chunks_folder_name": "E:/datasets/2sec-60perc-gray/chunks",
         "labels_folder_name": "data/labels",
-        "npys_folder_name": "data/npys",
+        "npys_folder_name": "E:/datasets/2sec-60perc-gray",
         "tables_folder_name": "data/tables",
     },
     "table_names": {
