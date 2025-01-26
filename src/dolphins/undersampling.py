@@ -15,5 +15,8 @@ def undersample(
     df_undersampled, _ = undersampler.fit_resample(df_to_undersample, labels)
 
     return pd.concat(
-        [df.query(f"split_name != '{split_to_undersample}'"), df_undersampled]
+        [
+            df.query(f"split_name != '{split_to_undersample}'"),
+            df_undersampled,
+        ]
     )
