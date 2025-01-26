@@ -6,6 +6,8 @@ def undersample(
     df: pd.DataFrame,
     split_to_undersample: str,
 ) -> pd.DataFrame:
+    print(f"\nApplying undersamping to {split_to_undersample}")
+
     undersampler = RandomUnderSampler(
         sampling_strategy="majority",
         random_state=42,
