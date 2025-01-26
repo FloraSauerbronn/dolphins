@@ -37,7 +37,7 @@ dev = [
     "ipykernel",
     "pip-tools",
     "pytest >= 8.0.1, < 9",
-    "ruff",
+    "ruff >= 0.9.3, < 0.10.0",
 ]
 
 [project.urls]

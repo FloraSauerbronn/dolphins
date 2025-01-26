@@ -13,7 +13,7 @@ def timing(f):
         result = f(*args, **kw)
         end_time = time()
         print(
-            f"function:{f.__name__} args:[{args}, {kw}] took: {(end_time-start_time):.4f} sec"
+            f"function:{f.__name__} args:[{args}, {kw}] took: {(end_time - start_time):.4f} sec"
         )
         return result
 
