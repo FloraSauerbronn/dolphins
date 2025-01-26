@@ -11,9 +11,12 @@ def get_df_with_split_by_audio_chunks_count(
     random_seed: int,
 ) -> pd.DataFrame:
     """
-    Adds a split column to a DataFrame based on the audio chunks count.
+    Adds split metadata to the DataFrame based on the audio chunks count.
     The split is done such that the sum of the audio chunks count in each split
     is proportional to the fractions specified in `split_name_to_fraction`.
+    The dataframe returned has two new columns:
+    - `split_name`: the name of the split
+    - `split_index`: the index of the corresponding audio chunk within the split
     """
     assert abs(sum(split_name_to_fraction.values()) - 1) < 0.1e-6
 
@@ -35,6 +38,7 @@ def get_df_with_split_by_audio_chunks_count(
         .rank(method="first", ascending=True)
         .iloc[:, 0]
         .astype(int)
+        .subtract(1)
     )
     return (
         df_with_splits.assign(split_index=split_index)

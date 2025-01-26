@@ -30,7 +30,9 @@ class DolphinsDataset(Dataset):
         return len(self.metadata_df)
 
     def __getitem__(self, idx):
-        data = self.transform(self.data[idx]).clone().detach().float() / 255.0
-        label = 0 if self.metadata_df.loc[:, "label"].iloc[idx] == "no_call" else 1
+        selected_metadata = self.metadata_df.iloc[idx]
+        split_index = selected_metadata["split_index"]
+        label = 0 if selected_metadata["label"] == "no_call" else 1
+        data = self.transform(self.data[split_index]).clone().detach().float() / 255.0
         label = torch.tensor(label, dtype=torch.long)
         return data, label
