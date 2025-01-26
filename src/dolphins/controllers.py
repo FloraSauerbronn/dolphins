@@ -6,6 +6,7 @@ from .audio_processing import generate_chunks_for_audios_folder
 from .data_split import get_df_with_split_by_audio_chunks_count
 from .image_generation import generate_and_save_images_npy
 from .targets import build_labels_df, join_target
+from .undersampling import undersample
 from .utils import read_table, save_table
 
 
@@ -82,7 +83,21 @@ def run_images(config: Dict[str, Any]):
         )
 
 
+def run_undersampling(config: Dict[str, Any]):
+    split_to_undersample = config.get("undersampling").get("split_to_undersample")
+    apply_undersampling = config.get("undersampling").get("apply_undersampling")
+    if apply_undersampling:
+        df_with_splits = read_table(config, "metadata_with_splits")
+        df_undersampled = undersample(df_with_splits, split_to_undersample)
+        save_table(
+            df_undersampled,
+            config=config,
+            table_name_key="metadata_undersampled",
+        )
+
+
 def run_all(config: Dict[str, Any]):
     run_chunks_and_base_metadata(config)
     run_splits(config)
     run_images(config)
+    run_undersampling(config)

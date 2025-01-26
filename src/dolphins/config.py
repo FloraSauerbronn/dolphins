@@ -9,6 +9,7 @@ CONFIG = {
     "table_names": {
         "base_metadata": "base_metadata",
         "metadata_with_splits": "metadata_with_splits",
+        "metadata_undersampled": "metadata_undersampled",
     },
     "chunk_params": {
         "window_seconds": 2,
@@ -33,5 +34,9 @@ CONFIG = {
         "hop_size": 512,
         "min_frequency": 15_000,
         "max_frequency": 48_000,
+    },
+    "undersampling": {
+        "split_to_undersample": "train",
+        "apply_undersampling": True,
     },
 }

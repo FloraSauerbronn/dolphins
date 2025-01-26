@@ -6,6 +6,7 @@ from .controllers import (
     run_chunks_and_base_metadata,
     run_images,
     run_splits,
+    run_undersampling,
 )
 
 
@@ -36,6 +37,14 @@ def images():
     Generates the spectrogram images for each audio chunk and channel and saves them into npy files for each data split.
     """
     run_images(CONFIG)
+
+
+@cli.command("run-undersampling")
+def undersampling():
+    """
+    Undersamples the metadata table with splits.
+    """
+    run_undersampling(CONFIG)
 
 
 @cli.command("run-all")
