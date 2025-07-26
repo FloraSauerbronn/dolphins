@@ -1,10 +1,10 @@
 CONFIG = {
     "folders": {
-        "audios_folder_name": "data/audios",
-        "chunks_folder_name": "data/chunks",
+        "audios_folder_name": "E:/all_audios",
+        "chunks_folder_name": "E:/datasets/5sec-60perc-gray/chunks",
         "labels_folder_name": "data/labels",
-        "npys_folder_name": "data/npys",
-        "tables_folder_name": "data/tables",
+        "npys_folder_name": "E:/datasets/5sec-60perc-gray/npys",
+        "tables_folder_name": "E:/datasets/5sec-60perc-gray/tables",
     },
     "table_names": {
         "base_metadata": "base_metadata",
@@ -12,7 +12,7 @@ CONFIG = {
         "metadata_undersampled": "metadata_undersampled",
     },
     "chunk_params": {
-        "window_seconds": 2,
+        "window_seconds": 5,
         "step_seconds": 0.25,
         "sql_query_params": {
             "minimum_percentage_of_call_in_chunk": 0.6,
