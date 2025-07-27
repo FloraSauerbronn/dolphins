@@ -138,8 +138,8 @@ This folder contains all source code necessary to reproduce the pipeline propose
 <h3>This project was a partnership between:</h3>
 
 <p align="center">
-  <img src="logos/ufsc.png" alt="UFSC" width="180" style="margin-right: 40px;">
-  <img src="logos/logo_Biosonar.png" alt="BIOSONAR" width="140">
+  <img src="logos/ufsc.png" alt="UFSC" width="150" style="margin-right: 40px;">
+  <img src="logos/logo_Biosonar.png" alt="BIOSONAR" width="200">
 </p>
 
 <p align="center">
