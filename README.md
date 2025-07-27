@@ -134,12 +134,14 @@ This folder contains all source code necessary to reproduce the pipeline propose
 * Prof. Antonio Fetter: [antoniofetter@gmail.com]
 * Andrea Dalben: [biosonardalben@gmail.com]
 
-### This project was a partnership between 
-* Federal University of Santa Catarina
 
-![UFSC](logos/ufsc.png)
+<h3>This project was a partnership between:</h3>
 
+<p align="center">
+  <img src="logos/ufsc.png" alt="UFSC" width="180" style="margin-right: 40px;">
+  <img src="logos/logo_Biosonar.png" alt="BIOSONAR" width="140">
+</p>
 
-* BIOSONAR
-
-![BIOSONAR](logos/logo_Biosonar.png)
+<p align="center">
+  <strong>Federal University of Santa Catarina</strong> &nbsp;&nbsp;&nbsp;&nbsp; <strong>BIOSONAR</strong>
+</p>
