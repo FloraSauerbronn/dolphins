@@ -10,7 +10,9 @@ It was developed as part of the master's research of **Flora Medeiros Sauerbronn
 We would also like to acknowledge the essential contributions of **Pedro Igor de Araújo Oliveira** and **Ingridy Moara Severino**, who were actively involved in the development and execution of this project.
 
 Audio recordings and manual annotations (labels) used in this research can be accessed at:  
-**[INSERT DATA REPOSITORY LINK HERE]**
+** Mendley Data**
+* Sauerbronn, Flora (2025), “PAM Recordings of Seismic Surveys - IBAMA Regulations in Brazil - part1”, Mendeley Data, V1, doi: 10.17632/w9b5z7znst.1
+* Sauerbronn, Flora (2025), “PAM Recordings of Seismic Surveys - IBAMA Regulations in Brazil - part2”, Mendeley Data, V1, doi: 10.17632/8srrb2rcw6.1
 
 ## Installation
 
